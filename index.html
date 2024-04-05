@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Validator</title>
+    <style>
+        #validation-symbol {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 200px; /* Adjust font size for size */
+            opacity: 0;  /* Initially hidden */
+            transition: opacity 1s ease-in-out;  /* Transition for fade in/out */
+        }
+    </style>
+</head>
+<body>
+    <h1>Ticket Validator</h1>
+    <form method="POST" onsubmit="return validateForm()">
+        <label for="ticket_number">Ticket Number:</label>
+        <input type="number" name="ticket_number" id="ticket_number" autofocus="autofocus" required aria-live="polite">  <br>
+        <input type="submit" value="Validate">
+    </form>
+    <p id="validation-message">{{ result }}</p>
+    <span id="validation-symbol"></span>
+    <script>
+        // Get validation message and symbol elements
+        const messageElement = document.getElementById("validation-message");
+        const symbolElement = document.getElementById("validation-symbol");
+
+        // Function to display and hide validation symbol with animation
+        function showSymbol(symbol, color) {
+            symbolElement.textContent = symbol;
+            symbolElement.style.color = color;
+            symbolElement.style.opacity = 1;  // Make symbol visible
+            symbolElement.classList.add("fade-in");  // Add animation class
+            setTimeout(() => {
+                symbolElement.classList.remove("fade-in");  // Remove animation class
+                symbolElement.style.opacity = 0;  // Hide symbol after animation
+            }, 1000);
+        }
+
+        // Function for basic client-side form validation
+        function validateForm() {
+            const ticketNumberInput = document.getElementById("ticket_number");
+            if (ticketNumberInput.value === "") {
+                alert("Please enter a ticket number.");
+                return false;  // Prevent form submission
+            }
+            return true;
+        }
+
+        // Update UI based on validation result from Flask
+        if (messageElement.textContent) {  // Check for any message
+            const message = messageElement.textContent.trim();  // Handle leading/trailing spaces
+
+            // Announce validation result for screen readers using aria-live
+            messageElement.setAttribute("aria-live", "assertive");  // Temporary announcement
+            setTimeout(() => {
+                messageElement.setAttribute("aria-live", "polite");  // Reset aria-live
+            }, 1000);
+
+            if (message === "Valid Ticket") {
+                showSymbol("✔", "green");  // Display green tick
+            } else if (message === "Invalid Ticket") {
+                showSymbol("✘", "red");  // Display red cross
+            } else {
+                alert("Unexpected validation message: " + message);  // Handle unexpected messages
+            }
+
+            // Set focus back on the input field after validation
+            ticketNumberInput.focus();
+        }
+    </script>
+</body>
+</html>
