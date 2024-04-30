@@ -43,8 +43,8 @@ def get_valid_ticket_range(today=date.today()):
   month = today.month
 
   # Construct the lower and upper bounds of the range (as strings)
-  lower_bound = f"{day:02d}{month:02d}00000"
-  upper_bound = f"{day:02d}{month:02d}20000"
+  lower_bound = f"{day:02d}{month:02d}20000000"
+  upper_bound = f"{day:02d}{month:02d}21000000"
 
   # Convert strings to integers for the valid range
   return list(range(int(lower_bound), int(upper_bound) + 1))
@@ -64,8 +64,8 @@ while True:
   ticket_number = input("Enter ticket number (or 'q' to quit): ")
 
   # Check for quit option
-  if ticket_number.lower() == 'q':
-    break
+  #if ticket_number.lower() == 'q':
+    #break
 
   # Try converting input to integer (handle non-numeric input)
   try:
@@ -96,3 +96,9 @@ def validate():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)  # Run the app on port 5000
+
+
+
+
+
+
